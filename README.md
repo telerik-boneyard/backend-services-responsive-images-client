@@ -254,33 +254,33 @@ Resizes the image proportionally to 350px width.
 #### Percentage Resize  
 Resizes the image proportionally to 75% of its original height.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}resize=w:75%/{{ExternalImagePath}}"/></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}resize=w:75%/{{ExternalImagePath}}"/></code></pre>  
 
 #### Disproportionate Resize  
 Resizes the image disproportionally to 350px by 250px.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}resize=w:350,h:250/{{ExternalImagePath}}"/></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}resize=w:350,h:250/{{ExternalImagePath}}"/></code></pre>  
 
 #### Resize To Canvas  
 Resizes the image to fit within the bounds of 300px by 300px.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}resize=w:300,h:300,fill:contain/{{ExternalImagePath}}"/></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}resize=w:300,h:300,fill:contain/{{ExternalImagePath}}"/></code></pre>  
 
 #### Upscale Resize  
 Upscale resizes an image proportionally to 3000px width.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}resize=w:3000,upscale:true/{{ExternalImagePath}}"/></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}resize=w:3000,upscale:true/{{ExternalImagePath}}"/></code></pre>  
 
 #### Disable Retina / HiDPI Support or set the custom value  
 By default we will serve larger images to devices with Retina and HiDPI support.  
   
 If for some reason you want a specific image to be served in normal size, you can set the data-resimg-dpi attribute to false on the image element.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}/{{ExternalImagePath}}" data-resimg-dpi="false" /></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}/{{ExternalImagePath}}" data-resimg-dpi="false" /></code></pre>  
 
 If for some reason you want to set a specific pixel density, you can set the data-resimg-dpi attribute to desired value.  
 
-<pre class='javascript'><code>&lt;img src="{{EverliveCdnUrl}}/{{ExternalImagePath}}" data-resimg-dpi="1.75" /></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}/{{ExternalImagePath}}" data-resimg-dpi="1.75" /></code></pre>  
 
 #### Responsive CSS Background Image  
 You can generate Responsive CSS background images. The browser will download a bandwidth-efficient preview image before replacing it with a perfectly sized and optimized version.  
