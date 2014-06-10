@@ -1,0 +1,42 @@
+@import "responsive-images.less";
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+
+  &[data-src] {
+    visibility: hidden;
+  }
+}
+
+
+.bg-img {
+  .responsive-bg("www.your-site.co/image-control.jpg", 50);
+  margin: 0 auto;
+  max-width: 50%;
+  height: 600px;
+  background-color: transparent;
+  background-position: 50% 50%;
+  background-size: contain;
+}
+
+.ulist {
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    margin: 0 1.25% 20px;
+    padding: 15px;
+    width: 45%;
+    border: 1px solid #e6e6e6;
+  }
+}

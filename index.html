@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7 ie6 oldie"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js lt-ie10 lt-ie9 lt-ie8 ie7 oldie"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js lt-ie10 lt-ie9 ie8 oldie"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js lt-ie10 ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--><html lang="en" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Responsive Images</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="css/styles.css">
+
+    </head>
+    <body>
+
+        <div id="bgImg" class="resimgs bg-img"></div>
+
+        <ul id="allImgs" class="ulist">
+            <li>
+                <img data-src="http://www.telerik.com/sfimages/default-source/Homepage/slider/headbanner_screenshots_image.jpg" class="resimgs" data-resimg-dpi="false">
+            </li>
+            <li style="width:400px;height:400px;">
+                <img data-src="http://bs1.cdn.telerik.com/image/v1/kZddAw6QIAzVkjDl/resize=w:600,h:600,fill:contain/http://www.telerik.com/sfimages/default-source/Homepage/slider/kendoui_hero_2.jpg" class="resimgs">
+            </li>
+        </ul>
+
+        <script src="src/js/everlive.images.js"></script>
+
+        <script>
+
+            everliveImages.init({
+                apiKey: 'kZddAw6QIAzVkjDl'
+            });
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,15 @@
+// Telerik Backend Services Responsive Images Settings
+@bs-api-key: "bgNHupjfo6xe9Ycj";
+@protocol: "http";
+@bs-image-server: "platform-cdn.telerik.com/image/v1/";
+
+// Load responsive background images via Telerik Backend Services
+//
+// @param @image-url {String} The image URL
+// @param @image-width {Number} Initial background width
+//
+// @example .responsive-background("http://domain.com/image.jpg", 100);
+//
+.responsive-bg (@image-url, @image-width) {
+  background-image: url("@{protocol}://@{bs-image-server}@{bs-api-key}/resize=w:@{image-width}/@{protocol}://@{image-url}");
+}

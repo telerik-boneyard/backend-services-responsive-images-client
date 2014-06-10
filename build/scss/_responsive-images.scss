@@ -1,0 +1,29 @@
+// Telerik Backend Services Responsive Images Settings
+$bs-api-key: "" !default;
+$protocol: "http" !default;
+$bs-image-server: "bs1.cdn.telerik.com/image/v1/" !default;
+
+// Load responsive background images via Telerik Backend Services
+//
+// @param $image-url {String} The image URL
+// @param $image-width {Number} Initial background width
+//
+// @return {String} Processed image URL with included Backend Services API key and image server
+//
+// @example background-image: url(responsive-background("http://domain.com/image.jpg", 100));
+//
+@function responsive-bg($image-url, $image-width) {
+  @return "#{$protocol}://#{$bs-image-server}#{$bs-api-key}/resize=w:#{$image-width}/#{$protocol}://#{$image-url}";
+}
+
+// Load responsive background images via Telerik Backend Services
+//
+// @param $image-url {String} The image URL
+// @param $image-width {Number} Initial background width
+//
+// @example @include responsive-background("http://domain.com/image.jpg", 100);
+//
+@mixin responsive-bg($image-url, $image-width) {
+  @include background-size(contain);
+  background-image: url(responsive-bg($image-url, $image-width));
+}

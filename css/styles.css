@@ -1,0 +1,45 @@
+/* line 1, ../src/scss/_extends.scss */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 12, ../src/scss/styles.scss */
+img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+/* line 17, ../src/scss/styles.scss */
+img[data-src] {
+  visibility: hidden;
+}
+
+/* line 22, ../src/scss/styles.scss */
+.bg-img {
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+  background-image: url("http://bs1.cdn.telerik.com/image/v1/kZddAw6QIAzVkjDl/resize=w:50/http://www.telerik.com/sfimages/default-source/Homepage/slider/mobile-apps.jpg");
+  margin: 0 auto;
+  max-width: 50%;
+  height: 205px;
+  background-repeat: no-repeat;
+}
+
+/* line 30, ../src/scss/styles.scss */
+.ulist {
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+}
+/* line 35, ../src/scss/styles.scss */
+.ulist li {
+  display: inline-block;
+  margin: 0 1.25% 20px;
+  padding: 15px;
+  width: 35%;
+  border: 1px solid #ccc;
+}

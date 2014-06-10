@@ -1,0 +1,42 @@
+@import "compass";
+
+@import "responsive-images";
+@import "extends";
+
+$bs-api-key: "kZddAw6QIAzVkjDl";
+
+* {
+  @extend %border-box;
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+
+  &[data-src] {
+    visibility: hidden;
+  }
+}
+
+.bg-img {
+  @include responsive-bg("www.telerik.com/sfimages/default-source/Homepage/slider/mobile-apps.jpg", 50);
+  margin: 0 auto;
+  max-width: 50%;
+  height: 205px;
+  background-repeat: no-repeat;
+}
+
+.ulist {
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+
+  li {
+  display: inline-block;
+  margin: 0 1.25% 20px;
+  padding: 15px;
+  width: 35%;
+  border: 1px solid #ccc;
+  }
+}
