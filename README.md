@@ -1,17 +1,17 @@
 ## Quick Start Guide 
 
-{{TelerikBackendServices}} provide a JavaScript resource and SASS and LESS mixins for quick and short-hand consuming of the Responsive Images feature in your web or hybrid mobile project.
+Telerik Backend Services provide a JavaScript resource and SASS and LESS mixins for quick and short-hand consuming of the Responsive Images feature in your web or hybrid mobile project.
 
-#### Step 1 : Download the {{TelerikBackendServices}} {{EverliveResrcApi}} ####
+#### Step 1 : Download the Telerik Backend Services everlive.images.min.js ####
 
 // TODO : 
 
-#### Step 2: Include {{TelerikBackendServices}} {{EverliveResrcApi}} file in your project   ####
+#### Step 2: Include Telerik Backend Services everlive.images.min.js file in your project   ####
 
-    <pre class='javascript'><code><script src="path/to/everlive-{{EverliveResrcApi}}.min.js"></script></code></pre>    
+    <pre class='javascript'><code><script src="path/to/everlive/everlive.images.min.js"></script></code></pre>    
     The JavaScript API detects the device pixel ratio, viewport resize and device rotation changes.  
    
-#### Step 3: Prefix your image path with the {{TelerikBackendServices}} server address,  and replace the `src` attribute with `data-src`
+#### Step 3: Prefix your image path with the Telerik Backend Services server address,  and replace the `src` attribute with `data-src`
     
     <pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/http://www.your-site.com/images/image.jpg" /></code></pre>  
     Make sure your original images are at least 2x of their maximum size to enable retina quality on high pixel density screens.  
@@ -21,9 +21,9 @@
     
     <pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/{{PathToTheImage}}" class="resimgs" /></code></pre> 
 
-#### Step 5: Initialize the {{EverliveResrcApi}} with your {{TelerikBackendServices}} API Key ####
+#### Step 5: Initialize the everliveImages with your Telerik Backend Services API Key ####
     
-    <pre class='javascript'><code>{{EverliveResrcApi}}.init('{{ApiKey}}');</code></pre>  
+    <pre class='javascript'><code>everliveImages.init('{{ApiKey}}');</code></pre>  
 
 #### (Optional) Step 6: Preventing flash of unstyled content   ####
 
@@ -35,23 +35,23 @@ In the case of Responsive Images, the styles of the `img` element may appear bef
     visibility: hidden;
 }</code></pre>  
 
- {{EverliveResrcApi}} will make sure each image is set to visible exactly when the browser starts to load it.
+ everliveImages will make sure each image is set to visible exactly when the browser starts to load it.
 
 
 ## How it works
 
 ### Responsive images in Telerik Backend Services
 
-In order to use the responsive images in {{TelerikBackendServices}} you have to request your image resources, through our services using the specified format:
+In order to use the responsive images in Telerik Backend Services you have to request your image resources, through our services using the specified format:
 
 <pre class='javascript'><code>{{EverliveCdnUrl}}{{ApiKey}}/{{ResizeParameters}}/{{URLToImage}}
 </code></pre>
 
 where: 
 
-- **ApiKey** is your {{TelerikBackendServices}} API key.
+- **ApiKey** is your Telerik Backend Services API key.
 - **ResizeParameters** is a correctly formatted set of resize parameters.
-- **URLToImage** is the URL to the image you want to resize. This can be a URL to a file stored in {{TelerikBackendServices}} or to an external resource.
+- **URLToImage** is the URL to the image you want to resize. This can be a URL to a file stored in Telerik Backend Services or to an external resource.
 
 
 ### Image resizing
@@ -152,9 +152,9 @@ Several common examples for resize parameters.
 
 ### Initialization
 
-You can initialize the {{EverliveResrcApi}} object by calling its constructor with the `init()` function. It accepts as parameters the API key of a {{TelerikBackendServices}} project or a configuration object. 
+You can initialize the everliveImages object by calling its constructor with the `init()` function. It accepts as parameters the API key of a Telerik Backend Services project or a configuration object. 
 
-<pre class='javascript'><code>{{EverliveResrcApi}}.init('{{ApiKey}}');</code></pre>  
+<pre class='javascript'><code>everliveImages.init('{{ApiKey}}');</code></pre>  
  
 The following options can be manually set to give you more control over when and how images are scaled. They should be passed to the `init()` function.  
 
@@ -168,8 +168,8 @@ The following options can be manually set to give you more control over when and
     <tbody>
         <tr>
             <td><b>apiKey</b></td>
-            <td>{{TelerikBackendServices}} API Key</td>
-            <td>API Key is a unique identifier for the {{TelerikBackendServices}} application.</td>
+            <td>Telerik Backend Services API Key</td>
+            <td>API Key is a unique identifier for the Telerik Backend Services application.</td>
         </tr>
         <tr>
             <td><b>resOnLoad</b></td>
@@ -204,12 +204,12 @@ The following options can be manually set to give you more control over when and
         <tr>
             <td><b>debug</b></td>
             <td>True or False (Default: false)</td>
-            <td>When the debug flag is set to true, {{EverliveResrcApi}} prints helpful log statements to the browser console about the images detected on your page.</td>
+            <td>When the debug flag is set to true, everliveImages prints helpful log statements to the browser console about the images detected on your page.</td>
         </tr>
     </tbody>
 </table>
 
-<pre class='javascript'><code>{{EverliveResrcApi}}.init({
+<pre class='javascript'><code>everliveImages.init({
     apiKey: '{{ApiKey}}',
     resOnLoad: true,
     resOnResize: true,
@@ -226,9 +226,9 @@ The following options can be manually set to give you more control over when and
 
 The following methods are very useful for applications that use `ajax()` loading or when you want to interact with images without reloading the page: 
 
-* **`responsiveAll()`**  - Call this method when you want to trigger the {{EverliveResrcApi}} manually. 
+* **`responsiveAll()`**  - Call this method when you want to trigger the everliveImages manually. 
 
-<pre class='javascript'><code>{{EverliveResrcApi}}.responsiveAll();</code></pre>
+<pre class='javascript'><code>everliveImages.responsiveAll();</code></pre>
 
 * **`responsive(object)`**  - Call this method when you want to make responsive a specified image or a set of images. The function accepts as parameters a HTML element or an array with HTML elements. 
      
@@ -239,10 +239,10 @@ var myImg1 = document.getElementById("myImg1");
 var myImg2 = document.getElementById("myImg2");  
 
 // make responsive a single image
-{{EverliveResrcApi}}.responsive(myImg1);
+everliveImages.responsive(myImg1);
 
 // make responsive the images in the array
-{{EverliveResrcApi}}.responsive([myImg1, myImg2]);</code></pre>  
+everliveImages.responsive([myImg1, myImg2]);</code></pre>  
 
 ### Examples  
 
