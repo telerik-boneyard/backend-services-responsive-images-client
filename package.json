@@ -1,6 +1,6 @@
 {
     "name": "backend-services-responsive-images",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "devDependencies": {
         "grunt": "~0.4.4",
         "glob": "~3.2.9",
