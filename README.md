@@ -4,7 +4,8 @@ Telerik Backend Services provide a JavaScript resource and SASS and LESS mixins 
 
 #### Step 1 : Download the Telerik Backend Services everlive.images.min.js ####
 
-// TODO : 
+[v.1.0.0](http://bs-static.cdn.telerik.com/1.0.0/everlive.images.min.js)
+[latest - for quick experiments](http://bs-static.cdn.telerik.com/latest/everlive.images.min.js)
 
 #### Step 2: Include Telerik Backend Services everlive.images.min.js file in your project   ####
 
