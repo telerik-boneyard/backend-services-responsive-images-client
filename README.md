@@ -10,19 +10,20 @@ Telerik Backend Services provide a JavaScript resource and SASS and LESS mixins 
 
 #### Step 2: Include Telerik Backend Services everlive.images.min.js file in your project   ####
 
-<pre class='javascript'><code><script src="path/to/everlive/everlive.images.min.js"></script></code></pre>    
-    The JavaScript API detects the device pixel ratio, viewport resize and device rotation changes.  
+<pre class='javascript'><code>&lt;script src="path/to/everlive/everlive.images.min.js"></script></code></pre>    
+
+The JavaScript API detects the device pixel ratio, viewport resize and device rotation changes.  
    
 #### Step 3: Prefix your image path with the Telerik Backend Services server address,  and replace the `src` attribute with `data-src`
     
-<pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/http://www.your-site.com/images/image.jpg" /></code></pre>  
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}/http://www.your-site.com/images/image.jpg" /></code></pre>  
 
-    Make sure your original images are at least 2x of their maximum size to enable retina quality on high pixel density screens.  
+Make sure your original images are at least 2x of their maximum size to enable retina quality on high pixel density screens.  
     
   
 #### Step 4: Add a class of `resimgs` to the images you want to be responsive: ####
     
-<pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/{{PathToTheImage}}" class="resimgs" /></code></pre> 
+<pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}/{{PathToTheImage}}" class="resimgs" /></code></pre> 
     
 #### Step 5: Initialize the everliveImages with your Telerik Backend Services API Key ####
     
@@ -254,6 +255,7 @@ Resizes the image proportionally to 350px width.
 
 
 <pre class='javascript'><code>&lt;img data-src="{{EverliveCdnUrl}}resize=w:350/{{ExternalImagePath}}"/></code></pre>  
+
 #### Percentage Resize  
 Resizes the image proportionally to 75% of its original height.  
 
