@@ -10,22 +10,23 @@ Telerik Backend Services provide a JavaScript resource and SASS and LESS mixins 
 
 #### Step 2: Include Telerik Backend Services everlive.images.min.js file in your project   ####
 
-    <pre class='javascript'><code><script src="path/to/everlive/everlive.images.min.js"></script></code></pre>    
+<pre class='javascript'><code><script src="path/to/everlive/everlive.images.min.js"></script></code></pre>    
     The JavaScript API detects the device pixel ratio, viewport resize and device rotation changes.  
    
 #### Step 3: Prefix your image path with the Telerik Backend Services server address,  and replace the `src` attribute with `data-src`
     
-    <pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/http://www.your-site.com/images/image.jpg" /></code></pre>  
+<pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/http://www.your-site.com/images/image.jpg" /></code></pre>  
+
     Make sure your original images are at least 2x of their maximum size to enable retina quality on high pixel density screens.  
     
   
 #### Step 4: Add a class of `resimgs` to the images you want to be responsive: ####
     
-    <pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/{{PathToTheImage}}" class="resimgs" /></code></pre> 
-
+<pre class='javascript'><code><img data-src="{{EverliveCdnUrl}}/{{PathToTheImage}}" class="resimgs" /></code></pre> 
+    
 #### Step 5: Initialize the everliveImages with your Telerik Backend Services API Key ####
     
-    <pre class='javascript'><code>everliveImages.init('{{ApiKey}}');</code></pre>  
+<pre class='javascript'><code>everliveImages.init('{{ApiKey}}');</code></pre>  
 
 #### (Optional) Step 6: Preventing flash of unstyled content   ####
 
@@ -128,27 +129,27 @@ Several common examples for resize parameters.
 
 - Concrete size 200px x 200px
 
-    <pre class='javascript'><code>resize=w:200,h:200</code></pre>
+<pre class='javascript'><code>resize=w:200,h:200</code></pre>
 
 - Fit in a 300px x 300px box. The service will automatically re-calculate the size, so that the image will fit in such container. The parameter fill:contain is set to note that the requested size must be calculated to fit between boundaries.
 
-    <pre class='javascript'><code>resize=w:300,h:300,fill:contain</code></pre>
+<pre class='javascript'><code>resize=w:300,h:300,fill:contain</code></pre>
 
 - With dimensions 50% less than the original image
 
-    <pre class='javascript'><code>resize=w:50pct,h:50pct</code></pre>
+<pre class='javascript'><code>resize=w:50pct,h:50pct</code></pre>
 
 - With upscale - if the image is smaller, you must set upscale:true in order to get a bigger picture resized.
 
-    <pre class='javascript'><code>resize=w:2000,h:2000,upscale:true</code></pre>
+<pre class='javascript'><code>resize=w:2000,h:2000,upscale:true</code></pre>
 
 - Relative size to one of the dimensions - in this case, the service will calculate automatically the other side's length in order to scale the image proportionally
 
-    <pre class='javascript'><code>resize=w:500</code></pre>
+<pre class='javascript'><code>resize=w:500</code></pre>
 
 - For devices with high pixel density, you can request images with higher quality. This will double the pixels in the returned image.
 
-    <pre class='javascript'><code>resize=w:300,h:500,pd:2</code></pre>
+<pre class='javascript'><code>resize=w:300,h:500,pd:2</code></pre>
 
 ## JavaScript API  
 
