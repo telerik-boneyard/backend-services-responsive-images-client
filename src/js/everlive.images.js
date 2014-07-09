@@ -38,16 +38,14 @@
      * @constant
      * @member settings
      * @property {String}  dataSrc        Image data-src attribute name
-     * @property {String}  dataWidth      Image data-resimg-width attribute name
      * @property {String}  dataDpi        Image data-resimg-dpi attribute name
      * @property {String}  urlTemplate    URL template
      */
     var settings = {
-            dataSrc: 'data-src',
-            dataWidth: 'data-resimg-width',
-            dataDpi: 'data-resimg-dpi',
-            urlTemplate: '[protocol][hostname][apikey]/[operations][url]'
-        };
+        dataSrc: 'data-src',
+        dataDpi: 'data-resimg-dpi',
+        urlTemplate: '[protocol][hostname][apikey]/[operations][url]'
+    };
 
     /**
      * Configurations defaults, can be overridden at initialization time.
@@ -64,16 +62,16 @@
      * @property {Boolean}   debug         Run in debugging mode
      */
     var defaults = {
-            server: 'bs1.cdn.telerik.com/image/v1/',
-            apiKey: '',
-            resOnLoad: true,
-            resOnResize: true,
-            ssl: false,
-            resClass: 'resimgs',
-            onReady: null,
-            onError: null,
-            debug: false
-        };
+        server: 'bs1.cdn.telerik.com/image/v1/',
+        apiKey: '',
+        resOnLoad: true,
+        resOnResize: true,
+        ssl: false,
+        resClass: 'resimgs',
+        onReady: null,
+        onError: null,
+        debug: false
+    };
 
     /**
      * Check if an element exists in array using a comparer function.
@@ -563,10 +561,11 @@
      */
     var getImgParams = function (src) {
         var operations = '',
-            imgUrl = src.replace(/.*?:\/\//g, ''),
+            imgUrl = src.replace(/.*?resize=[^//]*\//gi, ''), //src.replace(/.*?:\/\//g, ''),
             protocolRe = new RegExp('https?://', 'gi'),
             serverRe = new RegExp(options.server, 'gi'),
             apiKeyRe = new RegExp(options.apiKey + '/', 'gi');
+
         operations = src.replace(imgUrl, '').replace(protocolRe, '').replace(serverRe, '').replace(apiKeyRe, '').toLowerCase();
         if (operations !== '') {
             operations = operations.indexOf('/') ? operations.substring(0, operations.length - 1) : operations;
@@ -574,6 +573,11 @@
             operations = false;
         }
         operations = parseParamsString(operations);
+        // If it's a user resize operation, use the passed url in the data-src property
+        if(operations.isUserResize) {
+            imgUrl = src;
+        }
+
         return {
             imgUrl: imgUrl,
             operations: operations.params,
@@ -644,7 +648,7 @@
         } else {
             url = url.replace('[operations]', 'resize=w:' + imgWidth + pixelDensity + '/');
         }
-        url = url.replace('[url]', protocol + currentImage.imgUrl);
+        url = url.replace('[url]', currentImage.imgUrl);
 
         return url;
     };
@@ -667,6 +671,11 @@
             var isOnError = options.onError && typeof options.onError === 'function';
             if (isOnError) {
                 options.onError(el);
+            }
+
+            var isCallback = callback && typeof callback === 'function';
+            if (isCallback) {
+                callback(el); // pass element with error.
             }
         };
         img.onload = function () {
@@ -719,12 +728,28 @@
     var processAllImages = function () {
         var hasUnprocessed;
 
-        allImages.forEach(function (item, i) {
-            currentImage = item;
-            hasUnprocessed = processSingleImage(i);
+        var processedImagesCount = 0;
+        var allImagesCount = allImages.length;
+
+        // reset all images processed property
+        allImages.forEach(function(item) {
+            item.processed = false;
         });
 
-        var isOnReady = hasUnprocessed && options.onReady && typeof options.onReady === 'function';
+        allImages.forEach(function (item, i) {
+            currentImage = item;
+            hasUnprocessed = processSingleImage(i, function imageProcessedCallback(err, element, src, tag) {
+                processedImagesCount++;
+
+                if(processedImagesCount === allImagesCount) {
+                    _triggerOnReady(options);
+                }
+            });
+        });
+    };
+
+    var _triggerOnReady = function(options) {
+        var isOnReady = options.onReady && typeof options.onReady === 'function';
         if (isOnReady) {
             var images = [];
             allImages.forEach(function (item, i) {
@@ -748,7 +773,7 @@
      * @param  {Number} i  Index of current processing image
      * @return {Boolean}   Return true if image is processed
      */
-    var processSingleImage = function (i) {
+    var processSingleImage = function (i, imageProcessedCallback) {
         var element = currentImage.item,
             tag = currentImage.tag,
             processed = currentImage.processed;
@@ -759,7 +784,6 @@
             imgParams,
             imgWidth;
 
-        var savedImgWidth = getAttr(element, settings.dataWidth);
         if (isImage) {
             dataSrc = getAttr(element, settings.dataSrc);
         } else {
@@ -781,21 +805,27 @@
             return;
         }
 
-        if (isImage && currentImage.isUserResize) {
-            isProcessed = processed;
-        } else {
-            imgWidth = ( ! isImage) ? getBackgroundWidth(element) : getImageWidth(element);
-            isProcessed = processed && savedImgWidth && savedImgWidth >= imgWidth;
+        if(!currentImage.isUserResize) {
+            imgWidth = (!isImage) ? getBackgroundWidth(element) : getImageWidth(element);
         }
 
-        if ( ! isProcessed) {
+        if (!processed) {
             imgWidth = imgWidth ? imgWidth : false;
-            var src = getImgSrc(imgWidth);
 
-            setImageSrc(element, src, tag, function () {
-                allImages[i].processed = true;
-                if (imgWidth) {
-                    setAttr(element, settings.dataWidth, imgWidth);
+            var src = '';
+            if(currentImage.isUserResize) {
+                src = currentImage.imgUrl;
+            } else {
+                src = getImgSrc(imgWidth);
+            }
+
+            setImageSrc(element, src, tag, function (err) {
+                if(!err) {
+                    allImages[i].processed = true;
+                }
+
+                if(imageProcessedCallback && typeof imageProcessedCallback === 'function') {
+                    imageProcessedCallback(err, element, src, tag);
                 }
             });
             return true;
@@ -836,6 +866,7 @@
 
         if ( ! isApiKey()) return;
 
+        allImages = []; // clean up the images
         if (options.resOnLoad) {
             getAllImages();
         }
@@ -853,6 +884,8 @@
      * @param {Object} items A HTMLElement or a HTMLCollection of elements
      */
     ns.responsive = function (items) {
+        allImages = []; // clean up the images
+
         if ( ! items) {
             getAllImages();
             return;
@@ -871,6 +904,9 @@
      * @public
      * @method responsiveAll
      */
-    ns.responsiveAll = getAllImages;
+    ns.responsiveAll = function responsiveAll() {
+        allImages = [];
+        getAllImages();
+    }
 
 }(window.everliveImages = window.everliveImages || {}, window, document));
