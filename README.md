@@ -2,7 +2,7 @@
 
 Telerik Backend Services provide a JavaScript component and SASS and LESS mixins for quick and short-hand consuming of the Responsive Images feature in your web or hybrid mobile project.
 
-For more information, take a look at the full documentation: [Responsive Images]("http://docs.telerik.com/platform/backend-services/features/responsive-images/introduction")
+For more information, take a look at the full documentation: [Responsive Images](http://docs.telerik.com/platform/backend-services/features/responsive-images/introduction)
 
 ## License Information
 
