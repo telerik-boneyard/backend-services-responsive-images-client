@@ -3,7 +3,8 @@
  * @author Telerik Backend Services
  * @version: 0.1.0
  */
-;(function (ns, window, document, undefined) {
+;
+(function (ns, window, document, undefined) {
     /**
      * @namespace everliveImages
      *
@@ -73,111 +74,188 @@
         debug: false
     };
 
-    /**
-     * Check if an element exists in array using a comparer function.
-     *
-     * @private
-     * @method inArray
-     * @param  {Function} comparer The function to process each item against.
-     * @return {Boolean}           True if item is in Array
-     */
-    Array.prototype.inArray = function (comparer) {
-        var i = 0,
-            ii = this.length;
-        for ( ; i < ii; i++) {
-            if (comparer(this[i])) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    /**
-     * Adds an element to the array if it does not already exist using a comparer function.
-     *
-     * @private
-     * @method pushIfNotExist
-     * @param  {Object} element    Element which will be pushed into Array
-     * @param  {Function} comparer The function to process each item against
-     */
-    Array.prototype.pushIfNotExist = function (element, comparer) {
-        if ( ! this.inArray(comparer)) {
-            this.push(element);
-        }
-    };
-
-    /**
-     * Executes a provided function once per array element.
-     *
-     * @private
-     * @method forEach
-     * @param  {Function} fn Function to execute for each element
-     */
-    Array.prototype.forEach = Array.prototype.forEach || function (fn) {
-        if (this === void 0 || this === null) {
-            throw new TypeError();
-        }
-        var t = Object(this);
-        var len = t.length >>> 0;
-        if (typeof fn !== 'function') {
-            throw new TypeError();
-        }
-        var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-        for (var i = 0; i < len; i++) {
-            if (i in t)
-                fn.call(thisArg, t[i], i, t);
-        }
-    };
-
-    /**
-     * Determines whether its argument represents a numeric value.
-     *
-     * @private
-     * @method isNumber
-     * @return {Boolean} If argument is a number, it returns true. Otherwise it returns false.
-     */
-    String.prototype.isNumber = function () {
-        return !isNaN(parseFloat(this)) && isFinite(this);
-    };
-
-    /**
-     * Returns an array of a given object's own enumerable properties,
-     * in the same order as that provided by a for...in loop.
-     *
-     * @private
-     * @method keys
-     * @return {Array} Array whose elements are strings corresponding to the enumerable properties found directly upon object.
-     */
-    Object.keys = Object.keys || (function () {
-        var hasOwnProperty = Object.prototype.hasOwnProperty,
-            hasDontEnumBug = !({
-                toString: null
-            }).propertyIsEnumerable('toString'),
-            dontEnums = [
-                'toString',
-                'toLocaleString',
-                'valueOf',
-                'hasOwnProperty',
-                'isPrototypeOf',
-                'propertyIsEnumerable',
-                'constructor'
-            ],
-            dontEnumsLength = dontEnums.length;
-
-        return function (obj) {
-            if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
-            var result = [];
-            for (var prop in obj) {
-                if (hasOwnProperty.call(obj, prop)) result.push(prop);
-            }
-            if (hasDontEnumBug) {
-                for (var i = 0; i < dontEnumsLength; i++) {
-                    if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
+    var _ = {
+        /**
+         * Check if an element exists in array using a comparer function.
+         *
+         * @private
+         * @method inArray
+         * @param {Array} array the array of items
+         * @param  {Function} comparer The function to process each item against.
+         * @return {Boolean}           True if item is in Array
+         */
+        inArray: function inArray(array, comparer) {
+            var i = 0,
+                ii = array.length;
+            for (; i < ii; i++) {
+                if (comparer(array[i])) {
+                    return true;
                 }
             }
-            return result;
-        };
-    })();
+            return false;
+        },
+
+        /**
+         * Adds an element to the array if it does not already exist using a comparer function.
+         *
+         * @private
+         * @method pushIfNotExist
+         * @param  {Array} array The array to push element in
+         * @param  {Object} element    Element which will be pushed into Array
+         * @param  {Function} comparer The function to process each item against
+         */
+        pushIfNotExist: function pushIfNotExist(array, element, comparer) {
+            if (!this.inArray(array, comparer)) {
+                array.push(element);
+            }
+        },
+
+        /**
+         * Executes a provided function once per array element.
+         *
+         * @private
+         * @method each
+         * @param {Array} array of elements to iterate over.
+         * @param  {Function} fn Function to execute for each element
+         */
+        each: function each(array, fn) {
+            if (array === void 0 || array === null) {
+                throw new TypeError();
+            }
+            var t = Object(array);
+            var len = t.length >>> 0;
+            if (typeof fn !== 'function') {
+                throw new TypeError();
+            }
+            var thisArg = arguments.length >= 3 ? arguments[2] : void 0;
+            for (var i = 0; i < len; i++) {
+                if (i in t)
+                    fn.call(thisArg, t[i], i, t);
+            }
+        },
+        /**
+         * Determines whether its argument represents a numeric value.
+         *
+         * @private
+         * @method isStringNumber
+         * @return {Boolean} If argument is a number, it returns true. Otherwise it returns false.
+         */
+        isStringNumber: function (string) {
+            return !isNaN(parseFloat(string)) && isFinite(string);
+        },
+
+        /**
+         * Returns an array of a given object's own enumerable properties,
+         * in the same order as that provided by a for...in loop.
+         *
+         * @private
+         * @method keys
+         * @return {Array} Array whose elements are strings corresponding to the enumerable properties found directly upon object.
+         */
+       keys: (function () {
+            var hasOwnProperty = Object.prototype.hasOwnProperty,
+                hasDontEnumBug = !({
+                    toString: null
+                }).propertyIsEnumerable('toString'),
+                dontEnums = [
+                    'toString',
+                    'toLocaleString',
+                    'valueOf',
+                    'hasOwnProperty',
+                    'isPrototypeOf',
+                    'propertyIsEnumerable',
+                    'constructor'
+                ],
+                dontEnumsLength = dontEnums.length;
+
+            return function (obj) {
+                if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+                var result = [];
+                for (var prop in obj) {
+                    if (hasOwnProperty.call(obj, prop)) result.push(prop);
+                }
+                if (hasDontEnumBug) {
+                    for (var i = 0; i < dontEnumsLength; i++) {
+                        if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
+                    }
+                }
+                return result;
+            };
+        })(),
+
+        /**
+         * Merge the contents of two or more objects together.
+         *
+         * @private
+         * @method extend
+         * @param  {Object} out An object that will receive the new properties if additional objects are passed in.
+         * @return {Object}     Merged object
+         */
+        extend: function (out) {
+            out = out || {};
+            var i = 1,
+                ii = arguments.length;
+            for (; i < ii; i++) {
+                if (!arguments[i]) {
+                    continue;
+                }
+                for (var key in arguments[i]) {
+
+                    if (arguments[i].hasOwnProperty(key)) {
+                        out[key] = arguments[i][key];
+                    }
+                }
+            }
+            return out;
+        },
+
+
+        /**
+         * Check if given string is undefined, null, or empty string.
+         *
+         * @private
+         * @method isNullOrEmpty
+         * @param  {String}  value Tested string
+         * @return {Boolean}       Return true if string is null, empty or undefined
+         */
+        isNullOrEmpty: function (value) {
+            return typeof value === 'undefined' || value === null || value === '';
+        },
+
+        /**
+         * Returns a function, that, as long as it continues to be invoked, will not
+         * be triggered. The function will be called after it stops being called for
+         * N milliseconds. If `execAsap` is passed, trigger the function on the
+         * leading edge, instead of the trailing.
+         *
+         * @private
+         * @method debounce
+         * @param  {Function} fn         Function to be invoked
+         * @param  {Number}   threshold  Detection period
+         * @param  {Boolean}  execAsap   indicating whether the signal should happen at the beginning of the detection period (true) or the end.
+         */
+        debounce: function (fn, threshold, execAsap) {
+            var timeout;
+
+            return function debounced() {
+                var obj = this,
+                    args = arguments;
+
+                function delayed() {
+                    if (!execAsap) fn.apply(obj, args);
+                    timeout = null;
+                }
+
+                if (timeout) {
+                    clearTimeout(timeout);
+                } else if (execAsap) {
+                    fn.apply(obj, args);
+                }
+                timeout = setTimeout(delayed, threshold || 100);
+            };
+        }
+
+    };
 
     /**
      * Gives the values of all the CSS properties of an element after applying the active stylesheets
@@ -242,44 +320,6 @@
     };
 
     /**
-     * Merge the contents of two or more objects together.
-     *
-     * @private
-     * @method extend
-     * @param  {Object} out An object that will receive the new properties if additional objects are passed in.
-     * @return {Object}     Merged object
-     */
-    var extend = function (out) {
-        out = out || {};
-        var i = 1,
-            ii = arguments.length;
-        for ( ; i < ii; i++) {
-            if ( ! arguments[i]) {
-                continue;
-            }
-            for (var key in arguments[i]) {
-
-                if (arguments[i].hasOwnProperty(key)) {
-                    out[key] = arguments[i][key];
-                }
-            }
-        }
-        return out;
-    };
-
-    /**
-     * Check if given string is undefined, null, or empty string.
-     *
-     * @private
-     * @method isNullOrEmpty
-     * @param  {String}  value Tested string
-     * @return {Boolean}       Return true if string is null, empty or undefined
-     */
-    var isNullOrEmpty = function (value) {
-        return typeof value === 'undefined' || value === null || value === '';
-    };
-
-    /**
      * Check if given string is equal to 'img'.
      *
      * @private
@@ -300,13 +340,13 @@
      */
     var isApiKey = function () {
         var apiKey = options.apiKey,
-            isApiKeyEmpty = isNullOrEmpty(apiKey);
+            isApiKeyEmpty = _.isNullOrEmpty(apiKey);
 
         if (isApiKeyEmpty) {
             console.log('Backend Services API Key is not set.');
             return false;
         }
-        if ( ! isApiKeyEmpty && typeof apiKey !== 'string') {
+        if (!isApiKeyEmpty && typeof apiKey !== 'string') {
             console.log('Backend Services API Key should be a String');
             return false;
         }
@@ -318,42 +358,11 @@
             if (options.debug && console && typeof console.log === 'function') {
                 var i = 0,
                     ii = arguments.length;
-                for ( ; i < ii; i++) {
+                for (; i < ii; i++) {
                     console.log(arguments[i]);
                 }
             }
         }
-    };
-
-    /**
-     * Returns a function, that, as long as it continues to be invoked, will not
-     * be triggered. The function will be called after it stops being called for
-     * N milliseconds. If `execAsap` is passed, trigger the function on the
-     * leading edge, instead of the trailing.
-     *
-     * @private
-     * @method debounce
-     * @param  {Function} fn         Function to be invoked
-     * @param  {Number}   threshold  Detection period
-     * @param  {Boolean}  execAsap   indicating whether the signal should happen at the beginning of the detection period (true) or the end.
-     */
-    var debounce = function (fn, threshold, execAsap) {
-        var timeout;
-
-        return function debounced() {
-            var obj = this,
-                args = arguments;
-            function delayed() {
-                if ( ! execAsap) fn.apply(obj, args);
-                timeout = null;
-            }
-            if (timeout) {
-                clearTimeout(timeout);
-            } else if (execAsap) {
-                fn.apply(obj, args);
-            }
-            timeout = setTimeout(delayed, threshold || 100);
-        };
     };
 
     /**
@@ -389,7 +398,7 @@
      */
     var getPixelRatio = function (el) {
         var pixelDensity = getAttr(el, settings.dataDpi) || '';
-        return pixelDensity !== '' ? pixelDensity.isNumber() ? parseFloat(pixelDensity) : false : getDevicePixelRatio();
+        return pixelDensity !== '' ? _.isNumber(pixelDensity) ? parseFloat(pixelDensity) : false : getDevicePixelRatio();
     };
 
     /**
@@ -418,19 +427,6 @@
     };
 
     /**
-     * Set data attribute to given element.
-     *
-     * @private
-     * @method setAttr
-     * @param {Object} el                   An HTML element
-     * @param {String} attr                 Name of data attribute
-     * @param {String|Number|Boolean} value Value for data attribute
-     */
-    var setAttr = function (el, attr, value) {
-        el.setAttribute(attr, value);
-    };
-
-    /**
      * Check if element contains specific class name.
      *
      * @private
@@ -444,28 +440,12 @@
         return !!el.className.match(regex);
     };
 
-    /**
-     * Add class to element
-     *
-     * @private
-     * @method addClass
-     * @param {Object} el An HTML element
-     * @param {String} cl Class name
-     */
-    var addClass = function (el, cl) {
-        var classNames = el.className,
-            hasClassName = hasClass(el, cl);
-        if ( ! hasClassName) {
-            classNames = classNames ? classNames + ' ' : '';
-            el.className = classNames + cl;
-        }
-    };
-
     var convertToDomObject = function (items) {
         var newItems = [];
-        items.forEach(function (item, i) {
+        _.each(items, function (item, i) {
             newItems.push(item[0]);
         });
+
         return newItems;
     };
 
@@ -523,7 +503,7 @@
      * @return {Object}     Operations parameters
      */
     var parseParamsString = function (str) {
-        if ( ! str || typeof str === 'undefined' || str.length <= 1) {
+        if (!str || typeof str === 'undefined' || str.length <= 1) {
             return false;
         }
         var isUserResize = false,
@@ -574,7 +554,7 @@
         }
         operations = parseParamsString(operations);
         // If it's a user resize operation, use the passed url in the data-src property
-        if(operations.isUserResize) {
+        if (operations.isUserResize) {
             imgUrl = src;
         }
 
@@ -597,11 +577,11 @@
         var paramsStr = '',
             i = 0,
             ii = params.length;
-        for ( ; i < ii; i++) {
+        for (; i < ii; i++) {
             var item = params[i],
-                key = Object.keys(item)[0],
+                key = _.keys(item)[0],
                 value;
-            if ( ! isImageTag(currentImage.tag) && key === 'resize') {
+            if (!isImageTag(currentImage.tag) && key === 'resize') {
                 continue;
             }
             var pixelDensity = getPixelRatio(currentImage.item);
@@ -701,21 +681,22 @@
      * @param  {Object} items HTML elements
      */
     var getAllImages = function (items) {
-        if ( ! isApiKey()) return;
+        if (!isApiKey()) return;
 
         items = items || getImagesByClassName();
 
-        [].forEach.call(items, function (item, i) {
+        _.each(items, function (item, i) {
             var tag = item.tagName.toLowerCase();
             item = {
                 item: item,
                 tag: tag,
                 processed: false
             };
-            allImages.pushIfNotExist(item, function (e) {
+            _.pushIfNotExist(allImages, item, function (e) {
                 return e.item === item.item;
             });
         });
+
         processAllImages();
     };
 
@@ -732,31 +713,39 @@
         var allImagesCount = allImages.length;
 
         // reset all images processed property
-        allImages.forEach(function(item) {
+        _.each(allImages, function(item) {
             item.processed = false;
         });
 
-        allImages.forEach(function (item, i) {
+        _.each(allImages, function (item, i) {
             currentImage = item;
             hasUnprocessed = processSingleImage(i, function imageProcessedCallback(err, element, src, tag) {
                 processedImagesCount++;
 
-                if(processedImagesCount === allImagesCount) {
+                if (processedImagesCount === allImagesCount) {
                     _triggerOnReady(options);
                 }
             });
         });
     };
 
-    var _triggerOnReady = function(options) {
+    /**
+     * Collects the processed images and triggers onReady event.
+     *
+     * @private
+     * @method processSingleImage
+     * @param  {Object} object Component options object
+     */
+    var _triggerOnReady = function (options) {
         var isOnReady = options.onReady && typeof options.onReady === 'function';
         if (isOnReady) {
             var images = [];
-            allImages.forEach(function (item, i) {
+            _.each(allImages, function (item, i) {
                 if (item.processed) {
                     images.push(item.item);
                 }
             });
+
             options.onReady({
                 count: images.length,
                 items: images
@@ -779,7 +768,6 @@
             processed = currentImage.processed;
 
         var isImage = isImageTag(tag),
-            isProcessed,
             dataSrc,
             imgParams,
             imgWidth;
@@ -805,26 +793,37 @@
             return;
         }
 
-        if(!currentImage.isUserResize) {
+        if (!currentImage.isUserResize) {
             imgWidth = (!isImage) ? getBackgroundWidth(element) : getImageWidth(element);
         }
 
         if (!processed) {
             imgWidth = imgWidth ? imgWidth : false;
 
+            if(!imgWidth && !currentImage.isUserResize) { // we don't have the width of the user image either.
+              // if this element is not visible, we don't have to process it.
+              allImages[i].processed = false;
+
+              if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
+                  imageProcessedCallback("element is skipped, because it'snot visible.", element, src, tag);
+              }
+
+              return;
+            }
+
             var src = '';
-            if(currentImage.isUserResize) {
+            if (currentImage.isUserResize) {
                 src = currentImage.imgUrl;
             } else {
                 src = getImgSrc(imgWidth);
             }
 
             setImageSrc(element, src, tag, function (err) {
-                if(!err) {
+                if (!err) {
                     allImages[i].processed = true;
                 }
 
-                if(imageProcessedCallback && typeof imageProcessedCallback === 'function') {
+                if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
                     imageProcessedCallback(err, element, src, tag);
                 }
             });
@@ -842,9 +841,9 @@
      */
     var onWindowResize = function (fn) {
         if (window.addEventListener) {
-            window.addEventListener('resize', debounce(fn), false);
+            window.addEventListener('resize', _.debounce(fn), false);
         } else if (window.attachEvent) {
-            window.attachEvent('onresize', debounce(fn));
+            window.attachEvent('onresize', _.debounce(fn));
         }
     };
 
@@ -862,9 +861,9 @@
             config = {apiKey: config};
         }
 
-        options = extend({}, defaults, config);
+        options = _.extend({}, defaults, config);
 
-        if ( ! isApiKey()) return;
+        if (!isApiKey()) return;
 
         allImages = []; // clean up the images
         if (options.resOnLoad) {
@@ -886,11 +885,11 @@
     ns.responsive = function (items) {
         allImages = []; // clean up the images
 
-        if ( ! items) {
+        if (!items) {
             getAllImages();
             return;
         }
-        if ( ! items.length && items.nodeType) {
+        if (!items.length && items.nodeType) {
             items = [items];
         } else if (items.length > 1 && !items[0].nodeType) {
             items = convertToDomObject(items);

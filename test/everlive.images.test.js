@@ -5,12 +5,19 @@ var utility = {
         resizeServiceUrl: 'https://bs1.cdn.telerik.com/image/v1/kZddAw6QIAzVkjDl'
     },
 
-    getImageInDivHtml: function(divId, imageUrl, divWidth, divHeight) {
-        if(!divWidth) divWidth = 600;
-        if(!divHeight) divHeight = 300;
+    getImageInDivHtml: function(divId, imageUrl, divWidth, divHeight, additionalStyle) {
+        divWidth = divWidth || 600;
+        divHeight = divHeight || 300;
+        additionalStyle = additionalStyle || '';
 
-        var divHtml = '<div style="width: {divWidth}px; height: {divHeight}px;">'.replace('{divWidth}', divWidth).replace('{divHeight}', divHeight);
-        divHtml += '<img id="{divId}" data-src="{imageUrl}" class="resimgs" />'.replace('{divId}', divId).replace('{imageUrl}', imageUrl);
+        var divHtml = '<div style="width: {divWidth}px; height: {divHeight}px; {additionalStyle}">'
+          .replace('{divWidth}', divWidth)
+          .replace('{divHeight}', divHeight)
+          .replace('{additionalStyle}', additionalStyle);
+
+        divHtml += '<img id="{divId}" data-src="{imageUrl}" class="resimgs" />'
+          .replace('{divId}', divId)
+          .replace('{imageUrl}', imageUrl);
         divHtml += '</div>';
         return divHtml;
     }
@@ -19,12 +26,12 @@ var utility = {
 
 QUnit.asyncTest("Can resize 1 image by parent container size", function( assert ) {
 	// Arrange
-	expect(3); // expect three asserts
+	expect(3);
 
 	var $fixture = $("#qunit-fixture");
 
     $fixture.append(utility.getImageInDivHtml('test-img', utility.testData.dataSrc));
-	
+
 	var _onReady = function(data) {
 		// Assert
         var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:600,pd:1/' + utility.testData.dataSrc;
@@ -48,7 +55,7 @@ QUnit.asyncTest("Can resize 1 image by parent container size", function( assert 
 
 QUnit.asyncTest("Can resize 3 images by parent container size", function( assert ) {
     // Arrange
-    expect(4); // expect three asserts
+    expect(4);
 
     var $fixture = $("#qunit-fixture");
 
@@ -80,7 +87,7 @@ QUnit.asyncTest("Can resize 3 images by parent container size", function( assert
 
 QUnit.asyncTest("Can resize 2 images by parent container size and 1 user resize", function( assert ) {
     // Arrange
-    expect(4); // expect three asserts
+    expect(4);
 
     var $fixture = $("#qunit-fixture");
 
@@ -118,7 +125,7 @@ QUnit.asyncTest("Can resize 2 images by parent container size and 1 user resize"
 
 QUnit.asyncTest("Does not change from HTTP to HTTPS user image", function( assert ) {
     // Arrange
-    expect(3); // expect three asserts
+    expect(3);
 
     var $fixture = $("#qunit-fixture");
 
@@ -147,7 +154,7 @@ QUnit.asyncTest("Does not change from HTTP to HTTPS user image", function( asser
 
 QUnit.asyncTest("Can resize 1 image, then after change in dom can resize another 1.", function( assert ) {
     // Arrange
-    expect(6); // expect three asserts
+    expect(6);
 
     var $fixture = $("#qunit-fixture");
 
@@ -213,6 +220,101 @@ QUnit.asyncTest("Does not set pd1 when user defined pixel density exist.", funct
         ssl: true,
         onReady: _onReady
     });
+});
+
+QUnit.asyncTest("Responsive - single object", function( assert ) {
+  // Arrange
+  expect(3);
+
+  var $fixture = $("#qunit-fixture");
+  $fixture.append(utility.getImageInDivHtml('test-img', utility.testData.dataSrc));
+
+  var _onReady = function(data) {
+    // Assert
+    var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:600,pd:1/' + utility.testData.dataSrc;
+
+    assert.equal(data.count, 1, 'Only 1 image should have been processed.');
+    assert.ok(data.items[0].src, 'The item was not processed properly.');
+
+    var actualSrc = $fixture.find('#test-img').attr('src');
+    assert.equal(actualSrc, expectedSrc);
+
+    QUnit.start();
+  }
+
+  everliveImages.init({
+    apiKey: 'kZddAw6QIAzVkjDl',
+    ssl: true,
+    onReady: _onReady,
+    resOnLoad: false
+  });
+
+  // Act
+  everliveImages.responsive($('#test-img'));
+});
+
+QUnit.asyncTest("Responsive - list of objects", function( assert ) {
+    // Arrange
+    expect(4);
+
+    var $fixture = $("#qunit-fixture");
+
+    var beginWidth = 100;
+    for(var i=1;i<=3;i++) {
+        $fixture.append(utility.getImageInDivHtml('test-img'+i, utility.testData.dataSrc, beginWidth * i))
+    }
+
+    var _onReady = function(data) {
+        // Assert
+        assert.equal(data.count, 3, '3 images should have been processed.');
+        for(var i=1;i<=3;i++) {
+            var selector = '#test-img' + i;
+            var actualSrc = $fixture.find(selector).attr('src');
+            var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:' + i*beginWidth + ',pd:1/' + utility.testData.dataSrc;
+            assert.equal(actualSrc, expectedSrc, 'Incorrect src tag.');
+        }
+
+        QUnit.start();
+    }
+
+    everliveImages.init({
+        apiKey: 'kZddAw6QIAzVkjDl',
+        ssl: true,
+        onReady: _onReady,
+        resOnLoad: false
+    });
+
+    // Act
+    everliveImages.responsive($('img'));
+});
+
+QUnit.asyncTest("Resize - skip objects, which are rendered but not visible.", function( assert ) {
+  // Arrange
+  expect(3);
+
+  var $fixture = $("#qunit-fixture");
+  $fixture.append(utility.getImageInDivHtml('test-img', utility.testData.dataSrc));
+  $fixture.append(utility.getImageInDivHtml('test-img2', utility.testData.dataSrc, 600, 600, 'display: none;'))
+
+  var _onReady = function(data) {
+    // Assert
+    var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:600,pd:1/' + utility.testData.dataSrc;
+
+    assert.equal(data.count, 1, 'Only 1 image should have been processed.');
+    assert.ok(data.items[0].src, 'The item was not processed properly.');
+
+    var actualSrc = $fixture.find('#test-img').attr('src');
+    assert.equal(actualSrc, expectedSrc);
+
+    QUnit.start();
+  }
+
+  // Act
+  everliveImages.init({
+    apiKey: 'kZddAw6QIAzVkjDl',
+    ssl: true,
+    onReady: _onReady
+  });
 });
 
 /*
