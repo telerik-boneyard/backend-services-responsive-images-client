@@ -1,24 +1,7 @@
 {
   "name": "telerik-backend-services-responsive-images",
   "version": "1.0.0",
-  "homepage": "https://github.com/telerik/backend-services-responsive-images-client",
-  "authors": [
-    "telerik"
-  ],
-  "description": "Telerik Backend Services JavaScript component for easy consuming of the Responsive Images feature in your web/hybrid mobile project.",
-  "main": "build\\js\\everlive.images.js",
-  "keywords": [
-    "telerik",
-    "backend",
-    "services",
-    "responsive",
-    "images",
-    "client",
-    "library",
-    "js",
-    "javascript"
-  ],
-  "license": "Apache-2.0",
+  "main": "build/js/everlive.images.js",
   "ignore": [
     "**/.*",
     "node_modules",
