@@ -1,0 +1,19 @@
+{
+  "name": "telerik-backend-services-responsive-images",
+  "version": "1.0.0",
+  "main": "build/js/everlive.images.min.js",
+  "ignore": [
+    "css",
+    "src",
+    "tasks",
+    "test",
+    ".gitignore",
+    "Gruntfile.js",
+    "README.md",
+    "index.html",
+    "package.json",
+    "bower.json"
+  ],
+  "description": "Telerik Backend Services JavaScript component for easy consuming of the Responsive Images feature in your web/hybrid mobile project.",
+  "license": "Apache-2.0"
+}
