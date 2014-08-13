@@ -3,10 +3,17 @@
   "version": "1.0.0",
   "main": "build/js/everlive.images.js",
   "ignore": [
-    "**/.*",
+    ".gitignore",
+    "css",
+    "src",
+    "tasks",
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "bower.json",
+    "Gruntfile.js",
+    "index.html",
+    "package.json",
+    "README.md"
   ]
 }
