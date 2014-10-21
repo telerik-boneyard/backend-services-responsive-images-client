@@ -22,18 +22,6 @@
     var options = {};
 
     /**
-     * An array to store all selected images.
-     * @type {Array}
-     */
-    var allImages = [];
-
-    /**
-     * An object that will receive current image parameters.
-     * @type {Object}
-     */
-    var currentImage;
-
-    /**
      * Private API settings.
      *
      * @constant
@@ -96,21 +84,6 @@
         },
 
         /**
-         * Adds an element to the array if it does not already exist using a comparer function.
-         *
-         * @private
-         * @method pushIfNotExist
-         * @param  {Array} array The array to push element in
-         * @param  {Object} element    Element which will be pushed into Array
-         * @param  {Function} comparer The function to process each item against
-         */
-        pushIfNotExist: function pushIfNotExist(array, element, comparer) {
-            if (!this.inArray(array, comparer)) {
-                array.push(element);
-            }
-        },
-
-        /**
          * Executes a provided function once per array element.
          *
          * @private
@@ -152,7 +125,7 @@
          * @method keys
          * @return {Array} Array whose elements are strings corresponding to the enumerable properties found directly upon object.
          */
-       keys: (function () {
+        keys: (function () {
             var hasOwnProperty = Object.prototype.hasOwnProperty,
                 hasDontEnumBug = !({
                     toString: null
@@ -573,7 +546,7 @@
      * @param  {Object} params Image parameters object
      * @return {String}        Image parameters as string
      */
-    var getImgParamsString = function (params) {
+    var getImgParamsString = function (image, params) {
         var paramsStr = '',
             i = 0,
             ii = params.length;
@@ -581,10 +554,10 @@
             var item = params[i],
                 key = _.keys(item)[0],
                 value;
-            if (!isImageTag(currentImage.tag) && key === 'resize') {
+            if (!isImageTag(image.tag) && key === 'resize') {
                 continue;
             }
-            var pixelDensity = getPixelRatio(currentImage.item);
+            var pixelDensity = getPixelRatio(image.item);
             pixelDensity = (pixelDensity) ? ',pd:' + pixelDensity : '';
             for (var k in item) {
                 value = (key === 'resize') ? item[k] + pixelDensity : item[k];
@@ -599,15 +572,16 @@
      *
      * @private
      * @method getImgSrc
+     * @param  {Object} image The image object
      * @param  {Number} imgWidth Image container width
      * @return {String}          Image SRC (Image server URL, API Key, operations parameters and Image URL)
      */
-    var getImgSrc = function (imgWidth) {
+    var getImgSrc = function (image, imgWidth) {
         var protocol = getProtocol(options.ssl),
             server = options.server,
             apiKey = options.apiKey,
             url = settings.urlTemplate,
-            pixelDensity = getPixelRatio(currentImage.item);
+            pixelDensity = getPixelRatio(image.item);
 
         pixelDensity = pixelDensity ? ',pd:' + pixelDensity : '';
 
@@ -615,11 +589,11 @@
         url = url.replace('[apikey]', apiKey ? apiKey : '');
         url = url.replace('[hostname]', server);
 
-        var params = currentImage.operations || false;
+        var params = image.operations || false;
         if (params) {
             var operations = '';
-            params = getImgParamsString(params);
-            if (isImageTag(currentImage.tag)) {
+            params = getImgParamsString(image, params);
+            if (isImageTag(image.tag)) {
                 operations = imgWidth ? 'resize=w:' + imgWidth + pixelDensity + '/' + params : params;
             } else {
                 operations = 'resize=w:' + imgWidth + pixelDensity + '/' + params;
@@ -628,7 +602,7 @@
         } else {
             url = url.replace('[operations]', 'resize=w:' + imgWidth + pixelDensity + '/');
         }
-        url = url.replace('[url]', currentImage.imgUrl);
+        url = url.replace('[url]', image.imgUrl);
 
         return url;
     };
@@ -685,19 +659,20 @@
 
         items = items || getImagesByClassName();
 
-        _.each(items, function (item, i) {
+        return items;
+    };
+
+    var wrapImages = function(images) {
+        var imageItems = [];
+        _.each(images, function (item, i) {
             var tag = item.tagName.toLowerCase();
-            item = {
+            imageItems.push({
                 item: item,
-                tag: tag,
-                processed: false
-            };
-            _.pushIfNotExist(allImages, item, function (e) {
-                return e.item === item.item;
+                tag: tag
             });
         });
 
-        processAllImages();
+        return imageItems;
     };
 
     /**
@@ -706,24 +681,21 @@
      * @private
      * @method processAllImages
      */
-    var processAllImages = function () {
-        var hasUnprocessed;
-
+    var processImages = function (images) {
         var processedImagesCount = 0;
-        var allImagesCount = allImages.length;
+        var imagesCount = images.length;
 
-        // reset all images processed property
-        _.each(allImages, function(item) {
-            item.processed = false;
-        });
-
-        _.each(allImages, function (item, i) {
-            currentImage = item;
-            hasUnprocessed = processSingleImage(i, function imageProcessedCallback(err, element, src, tag) {
+        var successfullyProcessedImages = [];
+        _.each(images, function (item) {
+            processSingleImage(item, function imageProcessedCallback(err, element, src, tag) {
                 processedImagesCount++;
 
-                if (processedImagesCount === allImagesCount) {
-                    _triggerOnReady(options);
+                if (!err) {
+                    successfullyProcessedImages.push(element);
+                }
+
+                if (processedImagesCount === imagesCount) {
+                    _triggerOnReady(successfullyProcessedImages, options);
                 }
             });
         });
@@ -736,19 +708,12 @@
      * @method processSingleImage
      * @param  {Object} object Component options object
      */
-    var _triggerOnReady = function (options) {
+    var _triggerOnReady = function (successfullyProcessedImages, options) {
         var isOnReady = options.onReady && typeof options.onReady === 'function';
         if (isOnReady) {
-            var images = [];
-            _.each(allImages, function (item, i) {
-                if (item.processed) {
-                    images.push(item.item);
-                }
-            });
-
             options.onReady({
-                count: images.length,
-                items: images
+                count: successfullyProcessedImages.length,
+                items: successfullyProcessedImages
             });
         }
     };
@@ -759,13 +724,12 @@
      *
      * @private
      * @method processSingleImage
-     * @param  {Number} i  Index of current processing image
+     * @param  {Object} image  The image for processing
      * @return {Boolean}   Return true if image is processed
      */
-    var processSingleImage = function (i, imageProcessedCallback) {
-        var element = currentImage.item,
-            tag = currentImage.tag,
-            processed = currentImage.processed;
+    var processSingleImage = function (image, imageProcessedCallback) {
+        var element = image.item,
+            tag = image.tag;
 
         var isImage = isImageTag(tag),
             dataSrc,
@@ -781,9 +745,9 @@
 
         if (dataSrc) {
             imgParams = getImgParams(dataSrc);
-            currentImage.operations = imgParams.operations;
-            currentImage.imgUrl = imgParams.imgUrl;
-            currentImage.isUserResize = imgParams.isUserResize;
+            image.operations = imgParams.operations;
+            image.imgUrl = imgParams.imgUrl;
+            image.isUserResize = imgParams.isUserResize;
         } else {
             if (isImage) {
                 Logger.log('ERROR: No data-src attribute: ' + element.outerHTML);
@@ -793,43 +757,29 @@
             return;
         }
 
-        if (!currentImage.isUserResize) {
+        if (!image.isUserResize) {
             imgWidth = (!isImage) ? getBackgroundWidth(element) : getImageWidth(element);
         }
 
-        if (!processed) {
-            imgWidth = imgWidth ? imgWidth : false;
+        imgWidth = imgWidth ? imgWidth : false;
 
-            if(!imgWidth && !currentImage.isUserResize) { // we don't have the width of the user image either.
-              // if this element is not visible, we don't have to process it.
-              allImages[i].processed = false;
-
-              if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
-                  imageProcessedCallback("element is skipped, because it'snot visible.", element, src, tag);
-              }
-
-              return;
+        if (!imgWidth && !image.isUserResize) { // we don't have the width of the user image either.
+            // if this element is not visible, we don't have to process it.
+            if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
+                imageProcessedCallback("element is skipped, because it's not visible.", element, src, tag);
             }
 
-            var src = '';
-            if (currentImage.isUserResize) {
-                src = currentImage.imgUrl;
-            } else {
-                src = getImgSrc(imgWidth);
-            }
-
-            setImageSrc(element, src, tag, function (err) {
-                if (!err) {
-                    allImages[i].processed = true;
-                }
-
-                if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
-                    imageProcessedCallback(err, element, src, tag);
-                }
-            });
-            return true;
+            return false;
         }
-        return false;
+
+        var src = image.isUserResize ? image.imgUrl : getImgSrc(image, imgWidth);
+
+        setImageSrc(element, src, tag, function (err) {
+            if (imageProcessedCallback && typeof imageProcessedCallback === 'function') {
+                imageProcessedCallback(err, element, src, tag);
+            }
+        });
+        return true;
     };
 
     /**
@@ -865,12 +815,11 @@
 
         if (!isApiKey()) return;
 
-        allImages = []; // clean up the images
         if (options.resOnLoad) {
-            getAllImages();
+            ns.responsiveAll();
         }
         if (options.resOnResize) {
-            onWindowResize(processAllImages);
+            onWindowResize(ns.responsiveAll);
         }
     };
 
@@ -883,18 +832,18 @@
      * @param {Object} items A HTMLElement or a HTMLCollection of elements
      */
     ns.responsive = function (items) {
-        allImages = []; // clean up the images
-
         if (!items) {
-            getAllImages();
-            return;
+            items = getAllImages();
+        } else {
+            if (!items.length && items.nodeType) {
+                items = [items];
+            } else if (items.length > 1 && !items[0].nodeType) {
+                items = convertToDomObject(items);
+            }
         }
-        if (!items.length && items.nodeType) {
-            items = [items];
-        } else if (items.length > 1 && !items[0].nodeType) {
-            items = convertToDomObject(items);
-        }
-        getAllImages(items);
+
+        items = wrapImages(items);
+        processImages(items);
     };
 
     /**
@@ -904,8 +853,9 @@
      * @method responsiveAll
      */
     ns.responsiveAll = function responsiveAll() {
-        allImages = [];
-        getAllImages();
+        var images = getAllImages();
+        images = wrapImages(images);
+        processImages(images);
     }
 
 }(window.everliveImages = window.everliveImages || {}, window, document));

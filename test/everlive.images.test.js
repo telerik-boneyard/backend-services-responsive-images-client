@@ -317,6 +317,62 @@ QUnit.asyncTest("Resize - skip objects, which are rendered but not visible.", fu
   });
 });
 
+QUnit.asyncTest("Responsive - list of objects concurrently", function( assert ) {
+    // Arrange
+    expect(4);
+
+    var $fixture = $("#qunit-fixture");
+
+    var beginWidth = 100;
+    for(var i=1;i<=3;i++) {
+        $fixture.append(utility.getImageInDivHtml('test-img'+i, utility.testData.dataSrc, beginWidth * i))
+    }
+    var onReadyCallbackCalledCount = 0;
+
+    var _onReady = function(data) {
+        // Assert
+        if(!(data.count === 1 || data.count === 2)) {
+          assert.fail('invalid items count processed');
+        }
+
+        onReadyCallbackCalledCount++;
+        if(onReadyCallbackCalledCount == 2) {
+            assert.equal(onReadyCallbackCalledCount, 2, 'The on ready callback has been fired 2 times as expected.');
+        }
+
+        if(data.count === 2) {
+            for(var i=1;i<=2;i++) {
+                var selector = '#test-img' + i;
+                var actualSrc = $fixture.find(selector).attr('src');
+                var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:' + i*beginWidth + ',pd:1/' + utility.testData.dataSrc;
+                assert.equal(actualSrc, expectedSrc, 'Incorrect src tag.');
+            }
+        } else {
+            var selector = '#test-img' + 3;
+            var actualSrc = $fixture.find(selector).attr('src');
+            var expectedSrc = utility.testData.resizeServiceUrl + '/resize=w:' + 3*beginWidth + ',pd:1/' + utility.testData.dataSrc;
+            assert.equal(actualSrc, expectedSrc, 'Incorrect src tag.');
+        }
+
+        if(data.count === 2) {
+            QUnit.start();
+        }
+    };
+
+    everliveImages.init({
+        apiKey: 'kZddAw6QIAzVkjDl',
+        ssl: true,
+        onReady: _onReady,
+        resOnLoad: false
+    });
+
+    // Act
+    var firstHalf = [$('#test-img1'), $('#test-img2')];
+    var secondHalf = $('#test-img3');
+    everliveImages.responsive(firstHalf);
+    everliveImages.responsive(secondHalf);
+});
+
 /*
 QUnit.asyncTest("Makes new request on windows resize.", function( assert ) {
     // Arrange
