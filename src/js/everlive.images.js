@@ -6,10 +6,8 @@
 ;
 (function (ns, window, document, undefined) {
     /**
-     * @namespace everliveImages
-     *
-     * @name everliveImages
-     * @module everliveImages Library
+     * @class EverliveImages
+     * @classdesc The Responsive Images JavaScript component provides a JavaScript API to quickly make your JavaScript applications responsive.
      */
 
     'use strict';
@@ -802,7 +800,25 @@
      *
      * @public
      * @method init
-     * @param {Object|String} config User configuration object / string (API Key)
+     * @name init
+     * @memberof EverliveImages
+     * @param {String} config API Key is a unique identifier for the Telerik Backend Services application.
+     */
+    /**
+     * Check if API Key is set, trigger Responsive images and extends configuration object.
+     *
+     * @public
+     * @method init
+     * @memberof EverliveImages
+     * @param {Object} config User configuration object
+     * @param {String} config.apiKey API Key is a unique identifier for the Telerik Backend Services application.
+     * @param {Boolean} [config.resOnLoad=true] Resize images automatically once the page has fully loaded.
+     * @param {Boolean} [config.resOnResize=true] Resize images automatically on browser resize or device rotation.
+     * @param {Boolean} [config.ssl=false] The URI scheme to be used when making requests. Change it to "true" in order to have encrypted communication between the client and the server.
+     * @param {String} [config.resClass='resimgs'] User configuration object
+     * @param {Function} [config.onReady=null] A function to be invoked after all selected images are processed. Returns an object with the processed images.
+     * @param {Function} [config.onError=null] You can configure a custom error handler to be invoked if an error occurs when loading an image. Returns the image that failed to load.
+     * @param {Boolean} [config.debug=false] When the debug flag is set to true, Responsive Images JavaScript component prints helpful log statements to the browser console about the images detected on your page.
      */
     ns.init = function (config) {
         config = config || {};
@@ -829,6 +845,7 @@
      *
      * @public
      * @method responsive
+     * @memberof EverliveImages
      * @param {Object} items A HTMLElement or a HTMLCollection of elements
      */
     ns.responsive = function (items) {
@@ -850,6 +867,7 @@
      * Trigger Responsive images manually.
      *
      * @public
+     * @memberof EverliveImages
      * @method responsiveAll
      */
     ns.responsiveAll = function responsiveAll() {
