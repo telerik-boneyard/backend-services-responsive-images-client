@@ -801,7 +801,7 @@
      * @method init
      * @name init
      * @memberof EverliveImages
-     * @param {String} config ???<--change the param name. The application's API key.
+     * @param {String} apiKey API Key is a unique identifier for the Telerik Backend Services application.
      */
     /**
      * Initializes Responsive Images with a custom configuration object.
