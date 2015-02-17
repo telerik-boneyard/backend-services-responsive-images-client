@@ -7,14 +7,13 @@
 (function (ns, window, document, undefined) {
     /**
      * @class EverliveImages
-     * @classdesc The Responsive Images JavaScript component provides a JavaScript API to quickly make your JavaScript applications responsive.
+     * @classdesc The {{site.TelerikBackendServices}} Responsive Images JavaScript component provides a JavaScript API for image resizing to help you save bandwidth and make images load faster on the user device.
      */
 
     'use strict';
 
     /**
-     * An object that will receive the new properties in
-     * result of extending API default settings.
+     * An object that will receive new properties in result of extending the default API settings.
      * @type {Object}
      */
     var options = {};
@@ -24,9 +23,9 @@
      *
      * @constant
      * @member settings
-     * @property {String}  dataSrc        Image data-src attribute name
-     * @property {String}  dataDpi        Image data-resimg-dpi attribute name
-     * @property {String}  urlTemplate    URL template
+     * @property {String}  dataSrc        Contains the image data-src attribute
+     * @property {String}  dataDpi        Contains the image data-resimg-dpi attribute
+     * @property {String}  urlTemplate    Contains the image URL template
      */
     var settings = {
         dataSrc: 'data-src',
@@ -62,12 +61,12 @@
 
     var _ = {
         /**
-         * Check if an element exists in array using a comparer function.
+         * Checks to see if a specified element exists in an array using a comparer function.
          *
          * @private
          * @method inArray
-         * @param {Array} array the array of items
-         * @param  {Function} comparer The function to process each item against.
+         * @param {Array} array The array of items.
+         * @param  {Function} comparer The function to process each item.
          * @return {Boolean}           True if item is in Array
          */
         inArray: function inArray(array, comparer) {
@@ -796,29 +795,29 @@
     };
 
     /**
-     * Check if API Key is set, trigger Responsive images and extends configuration object.
+     * Initializes Responsive Images with an API Key.
      *
      * @public
      * @method init
      * @name init
      * @memberof EverliveImages
-     * @param {String} config API Key is a unique identifier for the Telerik Backend Services application.
+     * @param {String} config ???<--change the param name. The application's API key.
      */
     /**
-     * Check if API Key is set, trigger Responsive images and extends configuration object.
+     * Initializes Responsive Images with a custom configuration object.
      *
      * @public
      * @method init
      * @memberof EverliveImages
-     * @param {Object} config User configuration object
-     * @param {String} config.apiKey API Key is a unique identifier for the Telerik Backend Services application.
-     * @param {Boolean} [config.resOnLoad=true] Resize images automatically once the page has fully loaded.
-     * @param {Boolean} [config.resOnResize=true] Resize images automatically on browser resize or device rotation.
-     * @param {Boolean} [config.ssl=false] The URI scheme to be used when making requests. Change it to "true" in order to have encrypted communication between the client and the server.
-     * @param {String} [config.resClass='resimgs'] User configuration object
-     * @param {Function} [config.onReady=null] A function to be invoked after all selected images are processed. Returns an object with the processed images.
-     * @param {Function} [config.onError=null] You can configure a custom error handler to be invoked if an error occurs when loading an image. Returns the image that failed to load.
-     * @param {Boolean} [config.debug=false] When the debug flag is set to true, Responsive Images JavaScript component prints helpful log statements to the browser console about the images detected on your page.
+     * @param {Object} config Configuration object.
+     * @param {String} config.apiKey The application's API key.
+     * @param {Boolean} [config.resOnLoad=true] When this parameter is set to true, images are resized automatically on page load.
+     * @param {Boolean} [config.resOnResize=true] When this parameter is set to true, images are resized automatically on browser resize or screen rotation.
+     * @param {Boolean} [config.ssl=false] Sets URI scheme to be used when making requests. Value "true" means encrypted communication (HTTPS) between client and server, value "false" means unencrypted (HTTP).
+     * @param {String} [config.resClass='resimgs'] Class name that identifies which elements to be processed.
+     * @param {Function} [config.onReady=null] A function to be invoked after all selected images have been processed. Returns an object containing the processed images.
+     * @param {Function} [config.onError=null] Configures a custom error handler to be invoked if an error occurs when loading an image. Returns the image that failed to load.
+     * @param {Boolean} [config.debug=false] When this parameter is set to true, the Responsive Images JavaScript component prints helpful log information in the browser console about images detected on your page.
      */
     ns.init = function (config) {
         config = config || {};
@@ -840,13 +839,12 @@
     };
 
     /**
-     * Give control over an image or set of images.
-     * Any image element will be effected.
+     * Allows you to optimize a single image or a set of images. Accepts an HTML element or an array of HTML elements as parameters. 
      *
      * @public
      * @method responsive
      * @memberof EverliveImages
-     * @param {Object} items A HTMLElement or a HTMLCollection of elements
+     * @param {Object} items An HTMLElement or multiple elements in an HTMLCollection.
      */
     ns.responsive = function (items) {
         if (!items) {
@@ -864,7 +862,7 @@
     };
 
     /**
-     * Trigger Responsive images manually.
+     * Triggers Responsive Images manually for all images in the application.
      *
      * @public
      * @memberof EverliveImages
