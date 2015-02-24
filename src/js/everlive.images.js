@@ -7,7 +7,7 @@
 (function (ns, window, document, undefined) {
     /**
      * @class EverliveImages
-     * @classdesc The {{site.TelerikBackendServices}} Responsive Images JavaScript component provides a JavaScript API for image resizing to help you save bandwidth and make images load faster on the user device.
+     * @classdesc The {{site.TelerikBackendServices}} Responsive Images JavaScript component provides methods for image resizing to help you save bandwidth and make images load faster on the user device.
      */
 
     'use strict';
@@ -795,13 +795,13 @@
     };
 
     /**
-     * Initializes Responsive Images with an API Key.
+     * Initializes Responsive Images with an application API Key.
      *
      * @public
      * @method init
      * @name init
      * @memberof EverliveImages
-     * @param {String} apiKey API Key is a unique identifier for the Telerik Backend Services application.
+     * @param {String} apiKey Your application's API Key.
      */
     /**
      * Initializes Responsive Images with a custom configuration object.
